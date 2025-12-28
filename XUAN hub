@@ -1,6 +1,6 @@
--- 玄丛腳本 - 完整優化版 v6.2
+-- 玄丛腳本 - 完整優化版 v6.3
 print("🎮 =================================")
-print("🎮 玄丛腳本 - 完整優化版 v6.2")
+print("🎮 玄丛腳本 - 完整優化版 v6.3")
 print("🎮 秦始皇创作")
 print("🎮 =================================")
 
@@ -68,7 +68,7 @@ print("⚙️ 創建左側設置按鈕...")
 
 local sidebarButton = Instance.new("TextButton")
 sidebarButton.Name = "SidebarButton"
-sidebarButton.Size = UDim2.new(0, 45, 0, 45)
+sidebarButton.Size = UDim2.new(0, 50, 0, 50)
 sidebarButton.Position = UDim2.new(0, 15, 0, 15)
 sidebarButton.BackgroundColor3 = Color3.fromRGB(40, 60, 90)
 sidebarButton.BackgroundTransparency = 0.1
@@ -76,14 +76,14 @@ sidebarButton.BorderSizePixel = 0
 sidebarButton.Text = "⚙️"
 sidebarButton.TextColor3 = Color3.fromRGB(200, 230, 255)
 sidebarButton.Font = Enum.Font.GothamBold
-sidebarButton.TextSize = 18
+sidebarButton.TextSize = 20
 sidebarButton.AutoButtonColor = true
 sidebarButton.ZIndex = 1000
 sidebarButton.Parent = screenGui
 
 -- 圓角
 local sidebarCorner = Instance.new("UICorner")
-sidebarCorner.CornerRadius = UDim.new(0, 10)
+sidebarCorner.CornerRadius = UDim.new(0, 12)
 sidebarCorner.Parent = sidebarButton
 
 -- 邊框
@@ -95,8 +95,8 @@ sidebarStroke.Parent = sidebarButton
 -- 添加陰影效果
 local shadow = Instance.new("ImageLabel")
 shadow.Name = "Shadow"
-shadow.Size = UDim2.new(1, 10, 1, 10)
-shadow.Position = UDim2.new(0, -5, 0, -5)
+shadow.Size = UDim2.new(1, 12, 1, 12)
+shadow.Position = UDim2.new(0, -6, 0, -6)
 shadow.BackgroundTransparency = 1
 shadow.Image = "rbxassetid://1316045217"
 shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
@@ -109,21 +109,21 @@ shadow.Parent = sidebarButton
 -- 懸停提示
 local buttonHint = Instance.new("TextLabel")
 buttonHint.Name = "ButtonHint"
-buttonHint.Size = UDim2.new(0, 100, 0, 25)
-buttonHint.Position = UDim2.new(0, 55, 0, 10)
+buttonHint.Size = UDim2.new(0, 120, 0, 30)
+buttonHint.Position = UDim2.new(0, 60, 0, 10)
 buttonHint.BackgroundColor3 = Color3.fromRGB(30, 40, 60)
 buttonHint.BackgroundTransparency = 0.2
 buttonHint.Text = "開啟玄丛腳本"
 buttonHint.TextColor3 = Color3.fromRGB(200, 230, 255)
 buttonHint.Font = Enum.Font.Gotham
-buttonHint.TextSize = 11
+buttonHint.TextSize = 12
 buttonHint.TextXAlignment = Enum.TextXAlignment.Center
 buttonHint.Visible = false
 buttonHint.ZIndex = 999
 buttonHint.Parent = screenGui
 
 local hintCorner = Instance.new("UICorner")
-hintCorner.CornerRadius = UDim.new(0, 6)
+hintCorner.CornerRadius = UDim.new(0, 8)
 hintCorner.Parent = buttonHint
 
 -- 懸停效果
@@ -146,8 +146,8 @@ print("✅ 左側設置按鈕創建完成")
 -- ========================
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 240, 0, 220)  -- 高度調整為220
-mainFrame.Position = UDim2.new(0.5, -120, 0.5, -110)
+mainFrame.Size = UDim2.new(0, 280, 0, 240)
+mainFrame.Position = UDim2.new(0.5, -140, 0.5, -120)
 mainFrame.BackgroundColor3 = Color3.fromRGB(25, 35, 50)
 mainFrame.BackgroundTransparency = 0.1
 mainFrame.BorderSizePixel = 0
@@ -157,7 +157,7 @@ mainFrame.Parent = screenGui
 
 -- 圓角
 local uiCorner = Instance.new("UICorner")
-uiCorner.CornerRadius = UDim.new(0, 8)
+uiCorner.CornerRadius = UDim.new(0, 10)
 uiCorner.Parent = mainFrame
 
 -- 邊框
@@ -176,40 +176,40 @@ print("🔄 設置拖動系統...")
 -- 創建拖動標題欄
 local dragButton = Instance.new("TextButton")
 dragButton.Name = "DragButton"
-dragButton.Size = UDim2.new(1, 0, 0, 35)
+dragButton.Size = UDim2.new(1, 0, 0, 40)
 dragButton.Position = UDim2.new(0, 0, 0, 0)
 dragButton.BackgroundColor3 = Color3.fromRGB(40, 60, 90)
 dragButton.BackgroundTransparency = 0.2
 dragButton.BorderSizePixel = 0
-dragButton.Text = "❄️ 玄丛腳本 v6.2 (拖動我)"
+dragButton.Text = "❄️ 玄丛腳本 v6.3 (拖動我)"
 dragButton.TextColor3 = Color3.fromRGB(200, 230, 255)
 dragButton.Font = Enum.Font.GothamBold
-dragButton.TextSize = 14
+dragButton.TextSize = 15
 dragButton.AutoButtonColor = false
 dragButton.Parent = mainFrame
 
 local dragCorner = Instance.new("UICorner")
-dragCorner.CornerRadius = UDim.new(0, 8, 0, 0)
+dragCorner.CornerRadius = UDim.new(0, 10, 0, 0)
 dragCorner.Parent = dragButton
 
 -- 關閉按鈕（使用 ❌️ 圖標）
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
-closeButton.Size = UDim2.new(0, 28, 0, 28)
-closeButton.Position = UDim2.new(1, -32, 0, 4)
+closeButton.Size = UDim2.new(0, 32, 0, 32)
+closeButton.Position = UDim2.new(1, -36, 0, 4)
 closeButton.BackgroundColor3 = Color3.fromRGB(220, 100, 100)
 closeButton.BackgroundTransparency = 0.2
 closeButton.BorderSizePixel = 0
 closeButton.Text = "❌️"
 closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 16
+closeButton.TextSize = 18
 closeButton.AutoButtonColor = true
 closeButton.ZIndex = 2
 closeButton.Parent = dragButton
 
 local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 6)
+closeCorner.CornerRadius = UDim.new(0, 8)
 closeCorner.Parent = closeButton
 
 -- 關閉按鈕懸停效果
@@ -266,8 +266,8 @@ if isMobile then
     
     local touchArea = Instance.new("TextButton")
     touchArea.Name = "TouchArea"
-    touchArea.Size = UDim2.new(1, 25, 1, 25)
-    touchArea.Position = UDim2.new(0, -12, 0, -12)
+    touchArea.Size = UDim2.new(1, 30, 1, 30)
+    touchArea.Position = UDim2.new(0, -15, 0, -15)
     touchArea.BackgroundTransparency = 1
     touchArea.Text = ""
     touchArea.ZIndex = -1
@@ -316,13 +316,13 @@ end
 print("✅ 拖動系統已設置")
 
 -- ========================
--- 創建功能按鈕
+-- 創建功能按鈕（雙排佈局）
 -- ========================
-local function createButton(text, icon, yPos, color)
+local function createButton(text, icon, xPos, yPos, color)
     local button = Instance.new("TextButton")
     button.Name = text
-    button.Size = UDim2.new(1, -20, 0, 32)
-    button.Position = UDim2.new(0, 10, 0, yPos)
+    button.Size = UDim2.new(0.48, 0, 0, 35)
+    button.Position = UDim2.new(xPos, 10, 0, yPos)
     button.BackgroundColor3 = color
     button.BackgroundTransparency = 0.3
     button.BorderSizePixel = 0
@@ -335,17 +335,23 @@ local function createButton(text, icon, yPos, color)
     button.Parent = mainFrame
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 6)
+    corner.CornerRadius = UDim.new(0, 8)
     corner.Parent = button
     
     return button
 end
 
--- 創建按鈕
-local fastAttackBtn = createButton("快速攻擊", "⚡", 40, Color3.fromRGB(0, 150, 220))
-local piScriptBtn = createButton("皮腳本", "🅿️", 78, Color3.fromRGB(220, 150, 50))
-local flightBtn = createButton("飛行", "✈️", 116, Color3.fromRGB(100, 200, 100))
-local fpsBoostBtn = createButton("FPS優化", "🖥️", 154, Color3.fromRGB(180, 100, 220))
+-- 創建按鈕（兩兩一組，並排顯示）
+-- 第一行：快速攻擊 (左) 和 XA (右)
+local fastAttackBtn = createButton("快速攻擊", "⚡", 0, 45, Color3.fromRGB(0, 150, 220))
+local xaBtn = createButton("XA", "🌟", 0.52, 45, Color3.fromRGB(220, 120, 50))
+
+-- 第二行：皮腳本 (左) 和 飛行 (右)
+local piScriptBtn = createButton("皮腳本", "🅿️", 0, 85, Color3.fromRGB(220, 150, 50))
+local flightBtn = createButton("飛行", "✈️", 0.52, 85, Color3.fromRGB(100, 200, 100))
+
+-- 第三行：FPS優化 (左) 和 空位 (右)
+local fpsBoostBtn = createButton("FPS優化", "🖥️", 0, 125, Color3.fromRGB(180, 100, 220))
 
 print("✅ 功能按鈕創建完成")
 
@@ -354,25 +360,25 @@ print("✅ 功能按鈕創建完成")
 -- ========================
 local authorLabel = Instance.new("TextLabel")
 authorLabel.Name = "AuthorLabel"
-authorLabel.Size = UDim2.new(1, -20, 0, 18)
-authorLabel.Position = UDim2.new(0, 10, 0, 182)
+authorLabel.Size = UDim2.new(1, -20, 0, 20)
+authorLabel.Position = UDim2.new(0, 10, 0, 170)
 authorLabel.BackgroundTransparency = 1
 authorLabel.Text = "👑 秦始皇创作"
 authorLabel.TextColor3 = Color3.fromRGB(180, 180, 220)
 authorLabel.Font = Enum.Font.Gotham
-authorLabel.TextSize = 10
+authorLabel.TextSize = 11
 authorLabel.TextXAlignment = Enum.TextXAlignment.Center
 authorLabel.Parent = mainFrame
 
 local versionLabel = Instance.new("TextLabel")
 versionLabel.Name = "VersionLabel"
-versionLabel.Size = UDim2.new(1, -20, 0, 14)
-versionLabel.Position = UDim2.new(0, 10, 0, 200)
+versionLabel.Size = UDim2.new(1, -20, 0, 16)
+versionLabel.Position = UDim2.new(0, 10, 0, 192)
 versionLabel.BackgroundTransparency = 1
-versionLabel.Text = "❄️ 玄丛腳本 v6.2"
+versionLabel.Text = "❄️ 玄丛腳本 v6.3"
 versionLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
 versionLabel.Font = Enum.Font.Gotham
-versionLabel.TextSize = 9
+versionLabel.TextSize = 10
 versionLabel.TextXAlignment = Enum.TextXAlignment.Center
 versionLabel.Parent = mainFrame
 
@@ -384,8 +390,8 @@ local function showNotification(message, color, duration)
     
     local notifyFrame = Instance.new("Frame")
     notifyFrame.Name = "Notify_" .. tick()
-    notifyFrame.Size = UDim2.new(0, 220, 0, 60)
-    notifyFrame.Position = UDim2.new(1, 230, 1, -70)
+    notifyFrame.Size = UDim2.new(0, 240, 0, 70)  -- 稍大一些
+    notifyFrame.Position = UDim2.new(1, 250, 1, -80)
     notifyFrame.AnchorPoint = Vector2.new(1, 1)
     notifyFrame.BackgroundColor3 = color or Color3.fromRGB(40, 60, 90)
     notifyFrame.BackgroundTransparency = 0.2
@@ -394,7 +400,7 @@ local function showNotification(message, color, duration)
     notifyFrame.Parent = screenGui
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
+    corner.CornerRadius = UDim.new(0, 10)
     corner.Parent = notifyFrame
     
     local stroke = Instance.new("UIStroke")
@@ -417,7 +423,7 @@ local function showNotification(message, color, duration)
     print("📢 通知: " .. message)
     
     local slideIn = tweenService:Create(notifyFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Position = UDim2.new(1, -15, 1, -70)
+        Position = UDim2.new(1, -20, 1, -80)
     })
     slideIn:Play()
     
@@ -426,7 +432,7 @@ local function showNotification(message, color, duration)
         
         if notifyFrame and notifyFrame.Parent then
             local slideOut = tweenService:Create(notifyFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-                Position = UDim2.new(1, 230, 1, -70)
+                Position = UDim2.new(1, 250, 1, -80)
             })
             slideOut:Play()
             
@@ -439,9 +445,9 @@ local function showNotification(message, color, duration)
 end
 
 -- ========================
--- 你的快速攻擊代碼（替換版）
+-- 快速攻擊系統
 -- ========================
-print("⚡ 初始化快速攻擊系統（新版）...")
+print("⚡ 初始化快速攻擊系統...")
 
 local isFastAttackOn = false
 local fastAttackModule = nil
@@ -653,12 +659,60 @@ local function executePiScript()
 end
 
 -- ========================
+-- XA按鈕功能
+-- ========================
+print("🌟 設置XA功能...")
+
+local xaLoaded = false
+local xaRunning = false
+
+local function executeXAScript()
+    showNotification("🌟 正在加載XA腳本...", Color3.fromRGB(255, 165, 0), 2)
+    
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.gitcode.com/Xingtaiduan/Scripts/raw/main/Loader.lua"))()
+        return true
+    end)
+    
+    if success then
+        showNotification("✅ XA腳本加載成功！", Color3.fromRGB(0, 180, 0), 2)
+        print("✅ XA腳本加載成功")
+        return true
+    else
+        local errMsg = err or "未知錯誤"
+        showNotification("❌ XA腳本加載失敗\n錯誤: " .. tostring(errMsg), Color3.fromRGB(255, 0, 0), 3)
+        print("❌ XA腳本錯誤: " .. tostring(errMsg))
+        return false
+    end
+end
+
+-- ========================
 -- 飛行功能
 -- ========================
 print("✈️ 設置飛行功能...")
 
 local isFlying = false
 local flightLoaded = false
+
+local function executeFlightScript()
+    showNotification("✈️ 正在加載飛行模組...", Color3.fromRGB(255, 165, 0), 2)
+    
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fly.lua"))()
+        return true
+    end)
+    
+    if success then
+        showNotification("✅ 飛行模組加載成功！", Color3.fromRGB(0, 180, 0), 2)
+        print("✅ 飛行腳本加載成功")
+        return true
+    else
+        local errMsg = err or "未知錯誤"
+        showNotification("❌ 飛行模組加載失敗\n錯誤: " .. tostring(errMsg), Color3.fromRGB(255, 0, 0), 3)
+        print("❌ 飛行腳本錯誤: " .. tostring(errMsg))
+        return false
+    end
+end
 
 -- ========================
 -- FPS 優化功能
@@ -667,6 +721,26 @@ print("🖥️ 設置 FPS 優化功能...")
 
 local isFPSBoosted = false
 local fpsBoostLoaded = false
+
+local function executeFPSBoostScript()
+    showNotification("🖥️ 正在優化 FPS...", Color3.fromRGB(255, 165, 0), 2)
+    
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fpsboost"))()
+        return true
+    end)
+    
+    if success then
+        showNotification("✅ FPS 優化已應用！", Color3.fromRGB(0, 180, 0), 2)
+        print("✅ FPS 優化腳本加載成功")
+        return true
+    else
+        local errMsg = err or "未知錯誤"
+        showNotification("❌ FPS 優化失敗\n錯誤: " .. tostring(errMsg), Color3.fromRGB(255, 0, 0), 3)
+        print("❌ FPS 優化錯誤: " .. tostring(errMsg))
+        return false
+    end
+end
 
 -- ========================
 -- UI顯示/隱藏功能
@@ -685,7 +759,7 @@ local function toggleUI()
         buttonHint.Text = "關閉玄丛腳本"
         
         -- 動畫效果
-        mainFrame.Position = UDim2.new(0.5, -120, 0.5, -110)
+        mainFrame.Position = UDim2.new(0.5, -140, 0.5, -120)
         mainFrame.BackgroundTransparency = 1
         
         local fadeIn = tweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
@@ -722,7 +796,7 @@ sidebarButton.MouseButton1Click:Connect(function()
     toggleUI()
 end)
 
--- 快速攻擊按鈕（使用新版代碼）
+-- 快速攻擊按鈕
 fastAttackBtn.MouseButton1Click:Connect(function()
     print("🔘 快速攻擊按鈕被點擊")
     
@@ -760,6 +834,45 @@ fastAttackBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+-- XA按鈕
+xaBtn.MouseButton1Click:Connect(function()
+    if not xaLoaded then
+        -- 第一次點擊，加載XA腳本
+        xaBtn.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
+        xaBtn.Text = "🌟 加載中..."
+        
+        local success = executeXAScript()
+        
+        if success then
+            xaLoaded = true
+            xaRunning = true
+            xaBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+            xaBtn.Text = "🌟 XA [ON]"
+        else
+            xaBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+            xaBtn.Text = "🌟 加載失敗"
+            
+            -- 重置狀態
+            task.wait(1.5)
+            xaBtn.BackgroundColor3 = Color3.fromRGB(220, 120, 50)
+            xaBtn.Text = "🌟 XA"
+        end
+    else
+        -- 已經加載過，切換狀態顯示
+        xaRunning = not xaRunning
+        
+        if xaRunning then
+            xaBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+            xaBtn.Text = "🌟 XA [ON]"
+            showNotification("✅ XA功能已啟用", Color3.fromRGB(0, 180, 0), 1.5)
+        else
+            xaBtn.BackgroundColor3 = Color3.fromRGB(220, 120, 50)
+            xaBtn.Text = "🌟 XA [OFF]"
+            showNotification("🌟 XA功能已關閉", Color3.fromRGB(150, 150, 150), 1.5)
+        end
+    end
+end)
+
 -- 皮腳本按鈕
 piScriptBtn.MouseButton1Click:Connect(function()
     piScriptBtn.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
@@ -789,26 +902,16 @@ flightBtn.MouseButton1Click:Connect(function()
         flightBtn.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
         flightBtn.Text = "✈️ 加載中..."
         
-        showNotification("🔄 正在加載飛行模組...", Color3.fromRGB(255, 165, 0), 1.5)
-        
-        local success, err = pcall(function()
-            -- 加載遠程飛行腳本
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fly.lua"))()
-            return true
-        end)
+        local success = executeFlightScript()
         
         if success then
             flightLoaded = true
             isFlying = true
             flightBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
             flightBtn.Text = "✈️ 飛行 [ON]"
-            showNotification("✅ 飛行模組加載成功！\n✈️ 飛行已啟動", Color3.fromRGB(0, 180, 0), 2)
-            print("✅ 飛行腳本加載成功")
         else
             flightBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
             flightBtn.Text = "✈️ 加載失敗"
-            showNotification("❌ 飛行模組加載失敗\n錯誤: " .. tostring(err), Color3.fromRGB(255, 0, 0), 2.5)
-            print("❌ 飛行腳本錯誤: " .. tostring(err))
             
             -- 重置狀態
             task.wait(1.5)
@@ -838,25 +941,16 @@ fpsBoostBtn.MouseButton1Click:Connect(function()
         fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
         fpsBoostBtn.Text = "🖥️ 優化中..."
         
-        showNotification("🔄 正在優化 FPS...", Color3.fromRGB(255, 165, 0), 1.5)
-        
-        local success, err = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fpsboost"))()
-            return true
-        end)
+        local success = executeFPSBoostScript()
         
         if success then
             fpsBoostLoaded = true
             isFPSBoosted = true
             fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
             fpsBoostBtn.Text = "🖥️ FPS優化 [ON]"
-            showNotification("✅ FPS 優化已應用！\n遊戲運行將更流暢", Color3.fromRGB(0, 180, 0), 2)
-            print("✅ FPS 優化腳本加載成功")
         else
             fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
             fpsBoostBtn.Text = "🖥️ 優化失敗"
-            showNotification("❌ FPS 優化失敗\n錯誤: " .. tostring(err), Color3.fromRGB(255, 0, 0), 2.5)
-            print("❌ FPS 優化錯誤: " .. tostring(err))
             
             -- 重置狀態
             task.wait(1.5)
@@ -901,19 +995,20 @@ end
 task.wait(0.5)
 
 -- 顯示啟動通知
-showNotification("✅ 玄丛腳本已加載 v6.2\n⚡ 快速攻擊代碼已更新\n🅿️ 皮腳本可用\n✈️ 新增飛行功能\n🖥️ 新增FPS優化", Color3.fromRGB(50, 150, 200), 3)
+showNotification("✅ 玄丛腳本已加載 v6.3\n⚡ 快速攻擊 + 🌟 XA腳本\n🅿️ 皮腳本 + ✈️ 飛行\n🖥️ FPS優化", Color3.fromRGB(50, 150, 200), 3)
 
 print("🎮 =================================")
-print("🎮 玄丛腳本 - 快速攻擊優化版 v6.2")
+print("🎮 玄丛腳本 - 完整優化版 v6.3")
 print("🎮 設備: " .. deviceType)
-print("🎮 快速攻擊: ✅ 使用新版代碼")
-print("🎮 拖動系統: ✅ 已修復")
+print("🎮 UI尺寸: 280×240 (擴大版)")
+print("🎮 按鈕佈局: 雙排設計")
 print("🎮 功能包括:")
-print("🎮   - 新版快速攻擊系統")
-print("🎮   - 皮腳本加載")
-print("🎮   - 飛行功能 (遠程加載)")
-print("🎮   - FPS 優化功能")
-print("🎮   - 可拖動 UI 界面")
+print("🎮   ⚡ 新版快速攻擊系統")
+print("🎮   🌟 XA腳本 (GitCode)")
+print("🎮   🅿️ 皮腳本加載")
+print("🎮   ✈️ 飛行功能")
+print("🎮   🖥️ FPS優化功能")
+print("🎮   🎨 可拖動UI界面")
 print("🎮 =================================")
 
 -- 預加載快速攻擊系統
@@ -927,4 +1022,4 @@ task.spawn(function()
     end
 end)
 
-print("🚀 腳本加載完成！玄丛腳本 v6.2 已就緒。")
+print("🚀 腳本加載完成！玄丛腳本 v6.3 已就緒。")
