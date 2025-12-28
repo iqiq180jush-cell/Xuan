@@ -1,6 +1,6 @@
--- 玄丛腳本 - 快速攻擊優化版
+-- 玄丛腳本 - 完整優化版 v6.2
 print("🎮 =================================")
-print("🎮 玄丛腳本 - 快速攻擊優化版")
+print("🎮 玄丛腳本 - 完整優化版 v6.2")
 print("🎮 秦始皇创作")
 print("🎮 =================================")
 
@@ -146,8 +146,8 @@ print("✅ 左側設置按鈕創建完成")
 -- ========================
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 240, 0, 160)
-mainFrame.Position = UDim2.new(0.5, -120, 0.5, -80)
+mainFrame.Size = UDim2.new(0, 240, 0, 220)  -- 高度調整為220
+mainFrame.Position = UDim2.new(0.5, -120, 0.5, -110)
 mainFrame.BackgroundColor3 = Color3.fromRGB(25, 35, 50)
 mainFrame.BackgroundTransparency = 0.1
 mainFrame.BorderSizePixel = 0
@@ -181,7 +181,7 @@ dragButton.Position = UDim2.new(0, 0, 0, 0)
 dragButton.BackgroundColor3 = Color3.fromRGB(40, 60, 90)
 dragButton.BackgroundTransparency = 0.2
 dragButton.BorderSizePixel = 0
-dragButton.Text = "❄️ 玄丛腳本 (拖動我)"
+dragButton.Text = "❄️ 玄丛腳本 v6.2 (拖動我)"
 dragButton.TextColor3 = Color3.fromRGB(200, 230, 255)
 dragButton.Font = Enum.Font.GothamBold
 dragButton.TextSize = 14
@@ -344,6 +344,8 @@ end
 -- 創建按鈕
 local fastAttackBtn = createButton("快速攻擊", "⚡", 40, Color3.fromRGB(0, 150, 220))
 local piScriptBtn = createButton("皮腳本", "🅿️", 78, Color3.fromRGB(220, 150, 50))
+local flightBtn = createButton("飛行", "✈️", 116, Color3.fromRGB(100, 200, 100))
+local fpsBoostBtn = createButton("FPS優化", "🖥️", 154, Color3.fromRGB(180, 100, 220))
 
 print("✅ 功能按鈕創建完成")
 
@@ -353,7 +355,7 @@ print("✅ 功能按鈕創建完成")
 local authorLabel = Instance.new("TextLabel")
 authorLabel.Name = "AuthorLabel"
 authorLabel.Size = UDim2.new(1, -20, 0, 18)
-authorLabel.Position = UDim2.new(0, 10, 0, 122)
+authorLabel.Position = UDim2.new(0, 10, 0, 182)
 authorLabel.BackgroundTransparency = 1
 authorLabel.Text = "👑 秦始皇创作"
 authorLabel.TextColor3 = Color3.fromRGB(180, 180, 220)
@@ -365,9 +367,9 @@ authorLabel.Parent = mainFrame
 local versionLabel = Instance.new("TextLabel")
 versionLabel.Name = "VersionLabel"
 versionLabel.Size = UDim2.new(1, -20, 0, 14)
-versionLabel.Position = UDim2.new(0, 10, 0, 140)
+versionLabel.Position = UDim2.new(0, 10, 0, 200)
 versionLabel.BackgroundTransparency = 1
-versionLabel.Text = "❄️ 玄丛腳本 v6.0"
+versionLabel.Text = "❄️ 玄丛腳本 v6.2"
 versionLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
 versionLabel.Font = Enum.Font.Gotham
 versionLabel.TextSize = 9
@@ -651,6 +653,22 @@ local function executePiScript()
 end
 
 -- ========================
+-- 飛行功能
+-- ========================
+print("✈️ 設置飛行功能...")
+
+local isFlying = false
+local flightLoaded = false
+
+-- ========================
+-- FPS 優化功能
+-- ========================
+print("🖥️ 設置 FPS 優化功能...")
+
+local isFPSBoosted = false
+local fpsBoostLoaded = false
+
+-- ========================
 -- UI顯示/隱藏功能
 -- ========================
 local isUIVisible = false
@@ -667,7 +685,7 @@ local function toggleUI()
         buttonHint.Text = "關閉玄丛腳本"
         
         -- 動畫效果
-        mainFrame.Position = UDim2.new(0.5, -120, 0.5, -80)
+        mainFrame.Position = UDim2.new(0.5, -120, 0.5, -110)
         mainFrame.BackgroundTransparency = 1
         
         local fadeIn = tweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
@@ -764,6 +782,103 @@ piScriptBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+-- 飛行按鈕
+flightBtn.MouseButton1Click:Connect(function()
+    if not flightLoaded then
+        -- 第一次點擊，加載飛行腳本
+        flightBtn.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
+        flightBtn.Text = "✈️ 加載中..."
+        
+        showNotification("🔄 正在加載飛行模組...", Color3.fromRGB(255, 165, 0), 1.5)
+        
+        local success, err = pcall(function()
+            -- 加載遠程飛行腳本
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fly.lua"))()
+            return true
+        end)
+        
+        if success then
+            flightLoaded = true
+            isFlying = true
+            flightBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+            flightBtn.Text = "✈️ 飛行 [ON]"
+            showNotification("✅ 飛行模組加載成功！\n✈️ 飛行已啟動", Color3.fromRGB(0, 180, 0), 2)
+            print("✅ 飛行腳本加載成功")
+        else
+            flightBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+            flightBtn.Text = "✈️ 加載失敗"
+            showNotification("❌ 飛行模組加載失敗\n錯誤: " .. tostring(err), Color3.fromRGB(255, 0, 0), 2.5)
+            print("❌ 飛行腳本錯誤: " .. tostring(err))
+            
+            -- 重置狀態
+            task.wait(1.5)
+            flightBtn.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+            flightBtn.Text = "✈️ 飛行"
+        end
+    else
+        -- 已經加載過，切換狀態顯示
+        isFlying = not isFlying
+        
+        if isFlying then
+            flightBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+            flightBtn.Text = "✈️ 飛行 [ON]"
+            showNotification("✅ 飛行模式已開啟", Color3.fromRGB(0, 180, 0), 1.5)
+        else
+            flightBtn.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+            flightBtn.Text = "✈️ 飛行 [OFF]"
+            showNotification("🛑 飛行模式已關閉", Color3.fromRGB(200, 0, 0), 1.5)
+        end
+    end
+end)
+
+-- FPS 優化按鈕
+fpsBoostBtn.MouseButton1Click:Connect(function()
+    if not fpsBoostLoaded then
+        -- 第一次點擊，加載 FPS 優化
+        fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
+        fpsBoostBtn.Text = "🖥️ 優化中..."
+        
+        showNotification("🔄 正在優化 FPS...", Color3.fromRGB(255, 165, 0), 1.5)
+        
+        local success, err = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fpsboost"))()
+            return true
+        end)
+        
+        if success then
+            fpsBoostLoaded = true
+            isFPSBoosted = true
+            fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+            fpsBoostBtn.Text = "🖥️ FPS優化 [ON]"
+            showNotification("✅ FPS 優化已應用！\n遊戲運行將更流暢", Color3.fromRGB(0, 180, 0), 2)
+            print("✅ FPS 優化腳本加載成功")
+        else
+            fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+            fpsBoostBtn.Text = "🖥️ 優化失敗"
+            showNotification("❌ FPS 優化失敗\n錯誤: " .. tostring(err), Color3.fromRGB(255, 0, 0), 2.5)
+            print("❌ FPS 優化錯誤: " .. tostring(err))
+            
+            -- 重置狀態
+            task.wait(1.5)
+            fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(180, 100, 220)
+            fpsBoostBtn.Text = "🖥️ FPS優化"
+        end
+    else
+        -- 已經加載過，切換狀態顯示
+        isFPSBoosted = not isFPSBoosted
+        
+        if isFPSBoosted then
+            fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+            fpsBoostBtn.Text = "🖥️ FPS優化 [ON]"
+            showNotification("✅ FPS 優化已啟用", Color3.fromRGB(0, 180, 0), 1.5)
+        else
+            fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(180, 100, 220)
+            fpsBoostBtn.Text = "🖥️ FPS優化 [OFF]"
+            showNotification("🖥️ FPS 優化已關閉", Color3.fromRGB(150, 150, 150), 1.5)
+        end
+    end
+end)
+
 -- 關閉按鈕
 closeButton.MouseButton1Click:Connect(function()
     toggleUI()
@@ -786,18 +901,19 @@ end
 task.wait(0.5)
 
 -- 顯示啟動通知
-showNotification("✅ 玄丛腳本已加載 v6.0\n⚡ 快速攻擊代碼已更新\n🅿️ 皮腳本可用\n🖱️ 拖動系統已修復", Color3.fromRGB(50, 150, 200), 3)
+showNotification("✅ 玄丛腳本已加載 v6.2\n⚡ 快速攻擊代碼已更新\n🅿️ 皮腳本可用\n✈️ 新增飛行功能\n🖥️ 新增FPS優化", Color3.fromRGB(50, 150, 200), 3)
 
 print("🎮 =================================")
-print("🎮 玄丛腳本 - 快速攻擊優化版 v6.0")
+print("🎮 玄丛腳本 - 快速攻擊優化版 v6.2")
 print("🎮 設備: " .. deviceType)
 print("🎮 快速攻擊: ✅ 使用新版代碼")
 print("🎮 拖動系統: ✅ 已修復")
 print("🎮 功能包括:")
 print("🎮   - 新版快速攻擊系統")
-print("🎮   - 自動搜索敵人 (Enemies/Characters)")
-print("🎮   - 快速攻擊循環")
-print("🎮   - 自動觸發攻擊事件")
+print("🎮   - 皮腳本加載")
+print("🎮   - 飛行功能 (遠程加載)")
+print("🎮   - FPS 優化功能")
+print("🎮   - 可拖動 UI 界面")
 print("🎮 =================================")
 
 -- 預加載快速攻擊系統
@@ -811,4 +927,4 @@ task.spawn(function()
     end
 end)
 
-print("🚀 腳本加載完成！快速攻擊代碼已更新。")
+print("🚀 腳本加載完成！玄丛腳本 v6.2 已就緒。")
