@@ -1,11 +1,17 @@
--- 玄丛腳本 - 完整優化版 v6.4
+-- 玄丛腳本 - 完整優化版 v7.4
 print("🎮 =================================")
-print("🎮 玄丛腳本 - 完整優化版 v6.4")
+print("🎮 玄丛腳本 - 完整優化版 v7.4")
 print("🎮 秦始皇创作")
+print("🎮 完整功能整合版")
 print("🎮 =================================")
 
 -- 檢測設備類型
 local inputService = game:GetService("UserInputService")
+local tweenService = game:GetService("TweenService")
+local runService = game:GetService("RunService")
+local httpService = game:GetService("HttpService")
+local players = game:GetService("Players")
+
 local isMobile = inputService.TouchEnabled
 local isDesktop = inputService.MouseEnabled
 local deviceType = isMobile and "📱 手機" or "🖥️ 電腦"
@@ -16,7 +22,7 @@ repeat task.wait() until game:IsLoaded()
 print("✅ 遊戲已加載")
 
 -- 獲取玩家
-local player = game.Players.LocalPlayer
+local player = players.LocalPlayer
 if not player then
     warn("❌ 無法獲取玩家")
     return
@@ -52,7 +58,7 @@ print("✅ 服務加載完成")
 -- 創建主UI ScreenGui
 -- ========================
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "XuanCongScript_Large"
+screenGui.Name = "XuanCongScript_Full_v7_4"
 screenGui.Parent = playerGui
 screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -62,68 +68,54 @@ screenGui.IgnoreGuiInset = false
 print("✅ ScreenGui創建完成")
 
 -- ========================
--- 創建左側固定設置按鈕（超大版）
+-- 創建左側固定設置按鈕
 -- ========================
 print("⚙️ 創建左側設置按鈕...")
 
 local sidebarButton = Instance.new("TextButton")
 sidebarButton.Name = "SidebarButton"
-sidebarButton.Size = UDim2.new(0, 70, 0, 70)  -- 大幅擴大
-sidebarButton.Position = UDim2.new(0, 20, 0, 20)
+sidebarButton.Size = UDim2.new(0, 42, 0, 42)
+sidebarButton.Position = UDim2.new(0, 10, 0, 10)
 sidebarButton.BackgroundColor3 = Color3.fromRGB(40, 60, 90)
 sidebarButton.BackgroundTransparency = 0.1
 sidebarButton.BorderSizePixel = 0
 sidebarButton.Text = "⚙️"
 sidebarButton.TextColor3 = Color3.fromRGB(200, 230, 255)
 sidebarButton.Font = Enum.Font.GothamBold
-sidebarButton.TextSize = 28  -- 字體大幅加大
+sidebarButton.TextSize = 16
 sidebarButton.AutoButtonColor = true
 sidebarButton.ZIndex = 1000
 sidebarButton.Parent = screenGui
 
 -- 圓角
 local sidebarCorner = Instance.new("UICorner")
-sidebarCorner.CornerRadius = UDim.new(0, 16)  -- 圓角增大
+sidebarCorner.CornerRadius = UDim.new(0, 8)
 sidebarCorner.Parent = sidebarButton
 
 -- 邊框
 local sidebarStroke = Instance.new("UIStroke")
 sidebarStroke.Color = Color3.fromRGB(100, 150, 200)
-sidebarStroke.Thickness = 3  -- 邊框加粗
+sidebarStroke.Thickness = 1.5
 sidebarStroke.Parent = sidebarButton
-
--- 添加陰影效果
-local shadow = Instance.new("ImageLabel")
-shadow.Name = "Shadow"
-shadow.Size = UDim2.new(1, 16, 1, 16)
-shadow.Position = UDim2.new(0, -8, 0, -8)
-shadow.BackgroundTransparency = 1
-shadow.Image = "rbxassetid://1316045217"
-shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
-shadow.ImageTransparency = 0.5
-shadow.ScaleType = Enum.ScaleType.Slice
-shadow.SliceCenter = Rect.new(10, 10, 118, 118)
-shadow.ZIndex = 999
-shadow.Parent = sidebarButton
 
 -- 懸停提示
 local buttonHint = Instance.new("TextLabel")
 buttonHint.Name = "ButtonHint"
-buttonHint.Size = UDim2.new(0, 150, 0, 40)  -- 擴大提示框
-buttonHint.Position = UDim2.new(0, 80, 0, 15)
+buttonHint.Size = UDim2.new(0, 90, 0, 24)
+buttonHint.Position = UDim2.new(0, 45, 0, 9)
 buttonHint.BackgroundColor3 = Color3.fromRGB(30, 40, 60)
 buttonHint.BackgroundTransparency = 0.2
 buttonHint.Text = "開啟玄丛腳本"
 buttonHint.TextColor3 = Color3.fromRGB(200, 230, 255)
 buttonHint.Font = Enum.Font.Gotham
-buttonHint.TextSize = 16  -- 字體加大
+buttonHint.TextSize = 10
 buttonHint.TextXAlignment = Enum.TextXAlignment.Center
 buttonHint.Visible = false
 buttonHint.ZIndex = 999
 buttonHint.Parent = screenGui
 
 local hintCorner = Instance.new("UICorner")
-hintCorner.CornerRadius = UDim.new(0, 10)
+hintCorner.CornerRadius = UDim.new(0, 5)
 hintCorner.Parent = buttonHint
 
 -- 懸停效果
@@ -142,12 +134,12 @@ end)
 print("✅ 左側設置按鈕創建完成")
 
 -- ========================
--- 創建主框架（超大版）
+-- 創建主框架（稍微加寬一點點）
 -- ========================
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 350, 0, 320)  -- 大幅擴大：350×320
-mainFrame.Position = UDim2.new(0.5, -175, 0.5, -160)
+mainFrame.Size = UDim2.new(0, 290, 0, 240)
+mainFrame.Position = UDim2.new(0.5, -145, 0.5, -120)
 mainFrame.BackgroundColor3 = Color3.fromRGB(25, 35, 50)
 mainFrame.BackgroundTransparency = 0.1
 mainFrame.BorderSizePixel = 0
@@ -157,59 +149,59 @@ mainFrame.Parent = screenGui
 
 -- 圓角
 local uiCorner = Instance.new("UICorner")
-uiCorner.CornerRadius = UDim.new(0, 14)  -- 圓角增大
+uiCorner.CornerRadius = UDim.new(0, 8)
 uiCorner.Parent = mainFrame
 
 -- 邊框
 local uiStroke = Instance.new("UIStroke")
 uiStroke.Color = Color3.fromRGB(100, 150, 200)
-uiStroke.Thickness = 3  -- 邊框加粗
+uiStroke.Thickness = 1.5
 uiStroke.Parent = mainFrame
 
 print("✅ 主框架創建完成")
 
 -- ========================
--- 修復的拖動系統（適應大UI）
+-- 拖動系統
 -- ========================
 print("🔄 設置拖動系統...")
 
 -- 創建拖動標題欄
 local dragButton = Instance.new("TextButton")
 dragButton.Name = "DragButton"
-dragButton.Size = UDim2.new(1, 0, 0, 50)  -- 高度增加
+dragButton.Size = UDim2.new(1, 0, 0, 30)
 dragButton.Position = UDim2.new(0, 0, 0, 0)
 dragButton.BackgroundColor3 = Color3.fromRGB(40, 60, 90)
 dragButton.BackgroundTransparency = 0.2
 dragButton.BorderSizePixel = 0
-dragButton.Text = "❄️ 玄丛腳本 v6.4 (超大版) 拖動我"
+dragButton.Text = "❄️ 玄丛腳本 v7.4 - 完整版"
 dragButton.TextColor3 = Color3.fromRGB(200, 230, 255)
 dragButton.Font = Enum.Font.GothamBold
-dragButton.TextSize = 18  -- 字體加大
+dragButton.TextSize = 12
 dragButton.AutoButtonColor = false
 dragButton.Parent = mainFrame
 
 local dragCorner = Instance.new("UICorner")
-dragCorner.CornerRadius = UDim.new(0, 14, 0, 0)
+dragCorner.CornerRadius = UDim.new(0, 8, 0, 0)
 dragCorner.Parent = dragButton
 
--- 關閉按鈕（超大版）
+-- 關閉按鈕
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
-closeButton.Size = UDim2.new(0, 40, 0, 40)  -- 大幅加大
-closeButton.Position = UDim2.new(1, -45, 0, 5)
+closeButton.Size = UDim2.new(0, 24, 0, 24)
+closeButton.Position = UDim2.new(1, -28, 0, 3)
 closeButton.BackgroundColor3 = Color3.fromRGB(220, 100, 100)
 closeButton.BackgroundTransparency = 0.2
 closeButton.BorderSizePixel = 0
-closeButton.Text = "❌️"
+closeButton.Text = "❌"
 closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 24  -- 字體大幅加大
+closeButton.TextSize = 13
 closeButton.AutoButtonColor = true
 closeButton.ZIndex = 2
 closeButton.Parent = dragButton
 
 local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 10)
+closeCorner.CornerRadius = UDim.new(0, 5)
 closeCorner.Parent = closeButton
 
 -- 關閉按鈕懸停效果
@@ -221,12 +213,12 @@ closeButton.MouseLeave:Connect(function()
     closeButton.BackgroundColor3 = Color3.fromRGB(220, 100, 100)
 end)
 
--- 修復的拖動變量
+-- 拖動變量
 local isDragging = false
 local dragStartPosition = Vector2.new(0, 0)
 local frameStartPosition = UDim2.new(0, 0, 0, 0)
 
--- 修復的電腦拖動（使用正確的參數）
+-- 電腦拖動
 dragButton.MouseButton1Down:Connect(function()
     isDragging = true
     dragStartPosition = inputService:GetMouseLocation()
@@ -260,141 +252,160 @@ inputService.InputEnded:Connect(function(input)
     end
 end)
 
--- 手機拖動
-if isMobile then
-    print("📱 設置手機拖動系統...")
-    
-    local touchArea = Instance.new("TextButton")
-    touchArea.Name = "TouchArea"
-    touchArea.Size = UDim2.new(1, 40, 1, 40)  -- 加大觸控區域
-    touchArea.Position = UDim2.new(0, -20, 0, -20)
-    touchArea.BackgroundTransparency = 1
-    touchArea.Text = ""
-    touchArea.ZIndex = -1
-    touchArea.Parent = dragButton
-    
-    local touchStartPosition = Vector2.new(0, 0)
-    local touchFrameStart = UDim2.new(0, 0, 0, 0)
-    local touchDragging = false
-    
-    -- 觸控開始
-    touchArea.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            touchDragging = true
-            touchStartPosition = input.Position
-            touchFrameStart = mainFrame.Position
-            dragButton.BackgroundColor3 = Color3.fromRGB(60, 90, 140)
-        end
-    end)
-    
-    -- 觸控移動
-    inputService.InputChanged:Connect(function(input)
-        if touchDragging and input.UserInputType == Enum.UserInputType.Touch then
-            local currentTouch = input.Position
-            local delta = currentTouch - touchStartPosition
-            
-            mainFrame.Position = UDim2.new(
-                touchFrameStart.X.Scale,
-                touchFrameStart.X.Offset + delta.X,
-                touchFrameStart.Y.Scale,
-                touchFrameStart.Y.Offset + delta.Y
-            )
-        end
-    end)
-    
-    -- 觸控結束
-    inputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            if touchDragging then
-                touchDragging = false
-                dragButton.BackgroundColor3 = Color3.fromRGB(40, 60, 90)
-            end
-        end
-    end)
-end
-
 print("✅ 拖動系統已設置")
 
 -- ========================
--- 創建超大功能按鈕
+-- 創建分區標題
+-- ========================
+
+-- 腳本區標題
+local scriptLabel = Instance.new("TextLabel")
+scriptLabel.Name = "ScriptLabel"
+scriptLabel.Size = UDim2.new(1, -20, 0, 16)
+scriptLabel.Position = UDim2.new(0, 10, 0, 35)
+scriptLabel.BackgroundTransparency = 1
+scriptLabel.Text = "📜 腳本區"
+scriptLabel.TextColor3 = Color3.fromRGB(180, 200, 255)
+scriptLabel.Font = Enum.Font.Gotham
+scriptLabel.TextSize = 11
+scriptLabel.TextXAlignment = Enum.TextXAlignment.Center
+scriptLabel.Parent = mainFrame
+
+-- ========================
+-- 創建功能按鈕（修正寬度計算）
 -- ========================
 local function createButton(text, icon, xPos, yPos, color)
     local button = Instance.new("TextButton")
     button.Name = text
-    button.Size = UDim2.new(0.48, 0, 0, 50)  -- 按鈕高度大幅增加
-    button.Position = UDim2.new(xPos, 15, 0, yPos)  -- 邊距增加
+    button.Size = UDim2.new(0.46, 0, 0, 24)
+    button.Position = UDim2.new(xPos, 8, 0, yPos)
     button.BackgroundColor3 = color
     button.BackgroundTransparency = 0.3
     button.BorderSizePixel = 0
     button.Text = icon .. " " .. text
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.Font = Enum.Font.Gotham
-    button.TextSize = 16  -- 字體加大
+    button.TextSize = 10
     button.AutoButtonColor = true
     button.Active = true
     button.Parent = mainFrame
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 10)  -- 圓角增大
+    corner.CornerRadius = UDim.new(0, 5)
     corner.Parent = button
     
     return button
 end
 
--- 創建按鈕（兩兩一組，並排顯示）
--- 第一行：快速攻擊 (左) 和 XA (右)
-local fastAttackBtn = createButton("快速攻擊", "⚡", 0, 60, Color3.fromRGB(0, 150, 220))
-local xaBtn = createButton("XA", "🌟", 0.52, 60, Color3.fromRGB(220, 120, 50))
+-- 第一排：腳本區（皮腳本和XA在同一排）
+local piScriptBtn = createButton("皮腳本", "🅿️", 0, 54, Color3.fromRGB(220, 150, 50))
+local xaBtn = createButton("XA", "🌟", 0.50, 54, Color3.fromRGB(220, 120, 50))
 
--- 第二行：皮腳本 (左) 和 飛行 (右)
-local piScriptBtn = createButton("皮腳本", "🅿️", 0, 115, Color3.fromRGB(220, 150, 50))
-local flightBtn = createButton("飛行", "✈️", 0.52, 115, Color3.fromRGB(100, 200, 100))
+-- 功能區標題
+local functionLabel = Instance.new("TextLabel")
+functionLabel.Name = "FunctionLabel"
+functionLabel.Size = UDim2.new(1, -20, 0, 16)
+functionLabel.Position = UDim2.new(0, 10, 0, 85)
+functionLabel.BackgroundTransparency = 1
+functionLabel.Text = "⚙️ 功能區"
+functionLabel.TextColor3 = Color3.fromRGB(180, 200, 255)
+functionLabel.Font = Enum.Font.Gotham
+functionLabel.TextSize = 11
+functionLabel.TextXAlignment = Enum.TextXAlignment.Center
+functionLabel.Parent = mainFrame
 
--- 第三行：FPS優化 (左) 和 空位 (右)
-local fpsBoostBtn = createButton("FPS優化", "🖥️", 0, 170, Color3.fromRGB(180, 100, 220))
+-- 第二排：快速攻擊
+local fastAttackBtn = Instance.new("TextButton")
+fastAttackBtn.Name = "快速攻擊"
+fastAttackBtn.Size = UDim2.new(1, -16, 0, 24)
+fastAttackBtn.Position = UDim2.new(0, 8, 0, 104)
+fastAttackBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 220)
+fastAttackBtn.BackgroundTransparency = 0.3
+fastAttackBtn.BorderSizePixel = 0
+fastAttackBtn.Text = "⚡ 快速攻擊"
+fastAttackBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+fastAttackBtn.Font = Enum.Font.Gotham
+fastAttackBtn.TextSize = 10
+fastAttackBtn.AutoButtonColor = true
+fastAttackBtn.Active = true
+fastAttackBtn.Parent = mainFrame
 
--- 可以再添加一個按鈕在右側（如果需要）
--- local extraBtn = createButton("額外", "✨", 0.52, 170, Color3.fromRGB(150, 100, 220))
+local fastAttackCorner = Instance.new("UICorner")
+fastAttackCorner.CornerRadius = UDim.new(0, 5)
+fastAttackCorner.Parent = fastAttackBtn
 
-print("✅ 超大功能按鈕創建完成")
+-- 第三排：飛行和FPS優化在同一排
+local flightBtn = createButton("飛行", "✈️", 0, 135, Color3.fromRGB(100, 200, 100))
+local fpsBoostBtn = createButton("FPS優化", "🖥️", 0.50, 135, Color3.fromRGB(180, 100, 220))
+
+print("✅ 修正按鈕創建完成")
 
 -- ========================
--- 添加作者信息（位置調整）
+-- 添加分隔線
+-- ========================
+local divider1 = Instance.new("Frame")
+divider1.Name = "Divider1"
+divider1.Size = UDim2.new(1, -16, 0, 0.8)
+divider1.Position = UDim2.new(0, 8, 0, 82)
+divider1.BackgroundColor3 = Color3.fromRGB(100, 150, 200)
+divider1.BackgroundTransparency = 0.5
+divider1.BorderSizePixel = 0
+divider1.Parent = mainFrame
+
+local divider2 = Instance.new("Frame")
+divider2.Name = "Divider2"
+divider2.Size = UDim2.new(1, -16, 0, 0.8)
+divider2.Position = UDim2.new(0, 8, 0, 173)
+divider2.BackgroundColor3 = Color3.fromRGB(100, 150, 200)
+divider2.BackgroundTransparency = 0.5
+divider2.BorderSizePixel = 0
+divider2.Parent = mainFrame
+
+-- ========================
+-- 添加作者信息
 -- ========================
 local authorLabel = Instance.new("TextLabel")
 authorLabel.Name = "AuthorLabel"
-authorLabel.Size = UDim2.new(1, -30, 0, 25)  -- 高度增加
-authorLabel.Position = UDim2.new(0, 15, 0, 230)
+authorLabel.Size = UDim2.new(1, -16, 0, 18)
+authorLabel.Position = UDim2.new(0, 8, 0, 183)
 authorLabel.BackgroundTransparency = 1
 authorLabel.Text = "👑 秦始皇创作"
 authorLabel.TextColor3 = Color3.fromRGB(180, 180, 220)
 authorLabel.Font = Enum.Font.Gotham
-authorLabel.TextSize = 14  -- 字體加大
+authorLabel.TextSize = 11
 authorLabel.TextXAlignment = Enum.TextXAlignment.Center
 authorLabel.Parent = mainFrame
 
 local versionLabel = Instance.new("TextLabel")
 versionLabel.Name = "VersionLabel"
-versionLabel.Size = UDim2.new(1, -30, 0, 20)  -- 高度增加
-versionLabel.Position = UDim2.new(0, 15, 0, 260)
+versionLabel.Size = UDim2.new(1, -16, 0, 16)
+versionLabel.Position = UDim2.new(0, 8, 0, 205)
 versionLabel.BackgroundTransparency = 1
-versionLabel.Text = "❄️ 玄丛腳本 v6.4 (超大版)"
+versionLabel.Text = "❄️ 玄丛腳本 v7.4"
 versionLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
 versionLabel.Font = Enum.Font.Gotham
-versionLabel.TextSize = 12  -- 字體加大
+versionLabel.TextSize = 9
 versionLabel.TextXAlignment = Enum.TextXAlignment.Center
 versionLabel.Parent = mainFrame
 
+print("🎯 按鈕寬度計算：")
+print("🎯 UI寬度: 290像素")
+print("🎯 按鈕寬度: 290 × 0.46 = 133.4像素")
+print("🎯 左邊按鈕: x=8")
+print("🎯 右邊按鈕: x=8 + 133.4 + 4間隙 = 145.4像素")
+print("🎯 總寬度: 8 + 133.4 + 4 + 133.4 + 8 = 286.8像素")
+print("🎯 在UI範圍內: 286.8 < 290 ✓")
+
 -- ========================
--- 右下角通知系統（超大版）
+-- 右下角通知系統
 -- ========================
 local function showNotification(message, color, duration)
     duration = duration or 2.5
     
     local notifyFrame = Instance.new("Frame")
     notifyFrame.Name = "Notify_" .. tick()
-    notifyFrame.Size = UDim2.new(0, 280, 0, 80)  -- 加大通知框
-    notifyFrame.Position = UDim2.new(1, 290, 1, -90)
+    notifyFrame.Size = UDim2.new(0, 200, 0, 50)
+    notifyFrame.Position = UDim2.new(1, 210, 1, -60)
     notifyFrame.AnchorPoint = Vector2.new(1, 1)
     notifyFrame.BackgroundColor3 = color or Color3.fromRGB(40, 60, 90)
     notifyFrame.BackgroundTransparency = 0.2
@@ -403,30 +414,30 @@ local function showNotification(message, color, duration)
     notifyFrame.Parent = screenGui
     
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 12)  -- 圓角增大
+    corner.CornerRadius = UDim.new(0, 6)
     corner.Parent = notifyFrame
     
     local stroke = Instance.new("UIStroke")
     stroke.Color = Color3.fromRGB(150, 200, 255)
-    stroke.Thickness = 2
+    stroke.Thickness = 1.2
     stroke.Transparency = 0.3
     stroke.Parent = notifyFrame
     
     local textLabel = Instance.new("TextLabel")
-    textLabel.Size = UDim2.new(1, -25, 1, -25)
-    textLabel.Position = UDim2.new(0, 12, 0, 12)
+    textLabel.Size = UDim2.new(1, -12, 1, -12)
+    textLabel.Position = UDim2.new(0, 6, 0, 6)
     textLabel.BackgroundTransparency = 1
     textLabel.Text = message
     textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     textLabel.Font = Enum.Font.Gotham
-    textLabel.TextSize = 14  -- 字體加大
+    textLabel.TextSize = 10
     textLabel.TextWrapped = true
     textLabel.Parent = notifyFrame
     
     print("📢 通知: " .. message)
     
     local slideIn = tweenService:Create(notifyFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Position = UDim2.new(1, -25, 1, -90)
+        Position = UDim2.new(1, -10, 1, -60)
     })
     slideIn:Play()
     
@@ -435,7 +446,7 @@ local function showNotification(message, color, duration)
         
         if notifyFrame and notifyFrame.Parent then
             local slideOut = tweenService:Create(notifyFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-                Position = UDim2.new(1, 290, 1, -90)
+                Position = UDim2.new(1, 210, 1, -60)
             })
             slideOut:Play()
             
@@ -448,302 +459,270 @@ local function showNotification(message, color, duration)
 end
 
 -- ========================
--- 快速攻擊系統
+-- 安全加載外部腳本函數
 -- ========================
-print("⚡ 初始化快速攻擊系統...")
-
-local isFastAttackOn = false
-local fastAttackModule = nil
-
-_G.FastAttack = true
-
-local function setupFastAttack()
-    if _G.FastAttack then
-        local _ENV = (getgenv or getrenv or getfenv)()
-
-        local function SafeWaitForChild(parent, childName)
-            local success, result = pcall(function()
-                return parent:WaitForChild(childName)
-            end)
-            if not success or not result then
-                warn("noooooo: " .. childName)
+local function safeLoadExternalScript(url, scriptName)
+    local success, result = pcall(function()
+        local scriptContent = game:HttpGet(url, true)
+        if scriptContent then
+            local loadedScript = loadstring(scriptContent)
+            if loadedScript then
+                return loadedScript()
+            else
+                warn("❌ " .. scriptName .. " 加載失敗: 腳本內容無效")
+                return nil
             end
-            return result
-        end
-
-        local function WaitChilds(path, ...)
-            local last = path
-            for _, child in {...} do
-                last = last:FindFirstChild(child) or SafeWaitForChild(last, child)
-                if not last then break end
-            end
-            return last
-        end
-
-        local VirtualInputManager = game:GetService("VirtualInputManager")
-        local CollectionService = game:GetService("CollectionService")
-        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        local TeleportService = game:GetService("TeleportService")
-        local RunService = game:GetService("RunService")
-        local Players = game:GetService("Players")
-        local Player = Players.LocalPlayer
-
-        if not Player then
-            warn("找不到本地玩家。")
+        else
+            warn("❌ " .. scriptName .. " 加載失敗: 無法獲取腳本")
             return nil
         end
-
-        local Remotes = SafeWaitForChild(ReplicatedStorage, "Remotes")
-        if not Remotes then return nil end
-
-        local Validator = SafeWaitForChild(Remotes, "Validator")
-        local CommF = SafeWaitForChild(Remotes, "CommF_")
-        local CommE = SafeWaitForChild(Remotes, "CommE")
-
-        local ChestModels = SafeWaitForChild(workspace, "ChestModels")
-        local WorldOrigin = SafeWaitForChild(workspace, "_WorldOrigin")
-        local Characters = SafeWaitForChild(workspace, "Characters")
-        local Enemies = SafeWaitForChild(workspace, "Enemies")
-        local Map = SafeWaitForChild(workspace, "Map")
-
-        local EnemySpawns = SafeWaitForChild(WorldOrigin, "EnemySpawns")
-        local Locations = SafeWaitForChild(WorldOrigin, "Locations")
-
-        local RenderStepped = RunService.RenderStepped
-        local Heartbeat = RunService.Heartbeat
-        local Stepped = RunService.Stepped
-
-        local Modules = SafeWaitForChild(ReplicatedStorage, "Modules")
-        local Net = SafeWaitForChild(Modules, "Net")
-
-        local sethiddenproperty = sethiddenproperty or function(...) return ... end
-        local setupvalue = setupvalue or (debug and debug.setupvalue)
-        local getupvalue = getupvalue or (debug and debug.getupvalue)
-
-        local Settings = {
-            AutoClick = true,
-            ClickDelay = 0.0000000000000000000001
-        }
-
-        local Module = {}
-
-        Module.FastAttack = (function()
-            if _ENV.rz_FastAttack then
-                return _ENV.rz_FastAttack
-            end
-
-            local FastAttack = {
-                Distance = 10000,
-                attackMobs = true,
-                attackPlayers = true,
-                Equipped = nil
-            }
-
-            local RegisterAttack = SafeWaitForChild(Net, "RE/RegisterAttack")
-            local RegisterHit = SafeWaitForChild(Net, "RE/RegisterHit")
-
-            local function IsAlive(character)
-                return character and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0
-            end
-
-            local function ProcessEnemies(OthersEnemies, Folder)
-                local BasePart = nil
-                for _, Enemy in Folder:GetChildren() do
-                    local Head = Enemy:FindFirstChild("Head")
-                    if Head and IsAlive(Enemy) and Player:DistanceFromCharacter(Head.Position) < FastAttack.Distance then
-                        if Enemy ~= Player.Character then
-                            table.insert(OthersEnemies, { Enemy, Head })
-                            BasePart = Head
-                        end
-                    end
-                end
-                return BasePart
-            end
-
-            function FastAttack:Attack(BasePart, OthersEnemies)
-                if not BasePart or #OthersEnemies == 0 then return end
-                RegisterAttack:FireServer(Settings.ClickDelay or 0)
-                RegisterHit:FireServer(BasePart, OthersEnemies)
-            end
-
-            function FastAttack:AttackNearest()
-                local OthersEnemies = {}
-                local Part1 = ProcessEnemies(OthersEnemies, Enemies)
-                local Part2 = ProcessEnemies(OthersEnemies, Characters)
-                if #OthersEnemies > 0 then
-                    self:Attack(Part1 or Part2, OthersEnemies)
-                else
-                    task.wait(0)
-                end
-            end
-
-            function FastAttack:BladeHits()
-                local Equipped = IsAlive(Player.Character) and Player.Character:FindFirstChildOfClass("Tool")
-                if Equipped and Equipped.ToolTip ~= "Gun" then
-                    self:AttackNearest()
-                else
-                    task.wait(0)
-                end
-            end
-
-            local attackLoop = nil
-            
-            function FastAttack:start()
-                print("▶️ 開始快速攻擊")
-                attackLoop = task.spawn(function()
-                    while task.wait(Settings.ClickDelay) do
-                        if Settings.AutoClick then
-                            self:BladeHits()
-                        end
-                    end
-                end)
-            end
-            
-            function FastAttack:stop()
-                print("⏹️ 停止快速攻擊")
-                if attackLoop then
-                    task.cancel(attackLoop)
-                    attackLoop = nil
-                end
-            end
-
-            _ENV.rz_FastAttack = FastAttack
-            return FastAttack
-        end)()
-        
-        return Module.FastAttack
-    end
-    return nil
-end
-
--- 初始化快速攻擊系統
-local function initFastAttack()
-    showNotification("⚡ 正在初始化快速攻擊...", Color3.fromRGB(255, 165, 0), 1)
-    
-    local success, result = pcall(function()
-        return setupFastAttack()
     end)
     
-    if success and result then
-        showNotification("✅ 快速攻擊初始化完成", Color3.fromRGB(0, 180, 0), 1.5)
-        print("✅ 快速攻擊系統就緒")
+    if success then
+        print("✅ " .. scriptName .. " 加載成功")
         return result
     else
-        local errMsg = result or "未知錯誤"
-        showNotification("⚠️ 快速攻擊初始化失敗\n錯誤: " .. tostring(errMsg), Color3.fromRGB(255, 0, 0), 2)
-        print("❌ 快速攻擊初始化失敗: " .. errMsg)
+        warn("❌ " .. scriptName .. " 加載失敗: " .. tostring(result))
         return nil
     end
 end
 
 -- ========================
--- 皮腳本功能
+-- 外部腳本URL配置
 -- ========================
-print("🔄 設置皮腳本功能...")
+local EXTERNAL_SCRIPTS = {
+    PI_SCRIPT = "https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua",
+    XA = "https://raw.gitcode.com/Xingtaiduan/Scripts/raw/main/Loader.lua",
+    FLIGHT = "https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fly.lua",
+    FPS_BOOST = "https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fpsboost"
+}
 
-local function executePiScript()
-    showNotification("🅿️ 正在加載皮腳本...", Color3.fromRGB(255, 165, 0), 2)
+-- ========================
+-- 高級快速攻擊系統（您提供的代碼）
+-- ========================
+local AdvancedFastAttackSystem = {
+    enabled = false,
+    connection = nil,
+    settings = {
+        AutoClick = true,
+        ClickDelay = 0.000000000000000000000000001
+    }
+}
+
+local function initializeAdvancedFastAttack()
+    if AdvancedFastAttackSystem.initialized then
+        return AdvancedFastAttackSystem.module
+    end
     
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))()
-        return true
+    print("⚡ 正在初始化高級快速攻擊系統...")
+    
+    local success, result = pcall(function()
+        -- 您的快速攻擊代碼開始
+        _G.FastAttack = true
+
+        if _G.FastAttack then
+            local _ENV = (getgenv or getrenv or getfenv)()
+            
+            local function SafeWaitForChild(parent, childName)
+                local success, result = pcall(function()
+                    return parent:WaitForChild(childName)
+                end)
+                if not success or not result then
+                    warn("noooooo: " .. childName)
+                end
+                return result
+            end
+
+            local function WaitChilds(path, ...)
+                local last = path
+                for _, child in {...} do
+                    last = last:FindFirstChild(child) or SafeWaitForChild(last, child)
+                    if not last then break end
+                end
+                return last
+            end
+
+            local VirtualInputManager = game:GetService("VirtualInputManager")
+            local CollectionService = game:GetService("CollectionService")
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local TeleportService = game:GetService("TeleportService")
+            local RunService = game:GetService("RunService")
+            local Players = game:GetService("Players")
+            local Player = Players.LocalPlayer
+
+            if not Player then
+                warn("未找到本地玩家.")
+                return
+            end
+
+            local Remotes = SafeWaitForChild(ReplicatedStorage, "Remotes")
+            if not Remotes then return end
+
+            local Validator = SafeWaitForChild(Remotes, "Validator")
+            local CommF = SafeWaitForChild(Remotes, "CommF_")
+            local CommE = SafeWaitForChild(Remotes, "CommE")
+
+            local ChestModels = SafeWaitForChild(workspace, "ChestModels")
+            local WorldOrigin = SafeWaitForChild(workspace, "_WorldOrigin")
+            local Characters = SafeWaitForChild(workspace, "Characters")
+            local Enemies = SafeWaitForChild(workspace, "Enemies")
+            local Map = SafeWaitForChild(workspace, "Map")
+
+            local EnemySpawns = SafeWaitForChild(WorldOrigin, "EnemySpawns")
+            local Locations = SafeWaitForChild(WorldOrigin, "Locations")
+
+            local RenderStepped = RunService.RenderStepped
+            local Heartbeat = RunService.Heartbeat
+            local Stepped = RunService.Stepped
+
+            local Modules = SafeWaitForChild(ReplicatedStorage, "Modules")
+            local Net = SafeWaitForChild(Modules, "Net")
+
+            local sethiddenproperty = sethiddenproperty or function(...) return ... end
+            local setupvalue = setupvalue or (debug and debug.setupvalue)
+            local getupvalue = getupvalue or (debug and debug.getupvalue)
+
+            local Settings = {
+                AutoClick = true,
+                ClickDelay = 0.000000000000000000000000001
+            }
+
+            local Module = {}
+
+            Module.FastAttack = (function()
+                if _ENV.rz_FastAttack then
+                    return _ENV.rz_FastAttack
+                end
+
+                local FastAttack = {
+                    Distance = 5000,
+                    attackMobs = true,
+                    attackPlayers = true,
+                    Equipped = nil
+                }
+
+                local RegisterAttack = SafeWaitForChild(Net, "RE/RegisterAttack")
+                local RegisterHit = SafeWaitForChild(Net, "RE/RegisterHit")
+
+                local function IsAlive(character)
+                return character and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0
+                end
+
+                local function ProcessEnemies(OthersEnemies, Folder)
+                    local BasePart = nil
+                    for _, Enemy in Folder:GetChildren() do
+                        local Head = Enemy:FindFirstChild("Head")
+                        if Head and IsAlive(Enemy) and Player:DistanceFromCharacter(Head.Position) < FastAttack.Distance then
+                            if Enemy ~= Player.Character then
+                                table.insert(OthersEnemies, { Enemy, Head })
+                                BasePart = Head
+                            end
+                        end
+                    end
+                    return BasePart
+                end
+
+                function FastAttack:Attack(BasePart, OthersEnemies)
+                    if not BasePart or #OthersEnemies == 0 then return end
+                    RegisterAttack:FireServer(Settings.ClickDelay or 0)
+                    RegisterHit:FireServer(BasePart, OthersEnemies)
+                end
+
+                function FastAttack:AttackNearest()
+                    local OthersEnemies = {}
+                    local Part1 = ProcessEnemies(OthersEnemies, Enemies)
+                    local Part2 = ProcessEnemies(OthersEnemies, Characters)
+                    if #OthersEnemies > 0 then
+                        self:Attack(Part1 or Part2, OthersEnemies)
+                    else
+                        task.wait(0)
+                    end
+                end
+
+                function FastAttack:BladeHits()
+                    local Equipped = IsAlive(Player.Character) and Player.Character:FindFirstChildOfClass("Tool")
+                    if Equipped and Equipped.ToolTip ~= "Gun" then
+                        self:AttackNearest()
+                    else
+                        task.wait(0)
+                    end
+                end
+
+                task.spawn(function()
+                    while task.wait(Settings.ClickDelay) do
+                        if Settings.AutoClick then
+                            FastAttack:BladeHits()
+                        end
+                    end
+                end)
+
+                _ENV.rz_FastAttack = FastAttack
+                return FastAttack
+            end)()
+            
+            return Module.FastAttack
+        end
+        -- 您的快速攻擊代碼結束
     end)
     
     if success then
-        showNotification("✅ 皮腳本加載成功！", Color3.fromRGB(0, 180, 0), 2)
-        print("✅ 皮腳本加載成功")
-        return true
+        AdvancedFastAttackSystem.module = result
+        AdvancedFastAttackSystem.initialized = true
+        print("✅ 高級快速攻擊系統初始化成功")
+        return result
     else
-        local errMsg = err or "未知錯誤"
-        showNotification("❌ 皮腳本加載失敗\n錯誤: " .. tostring(errMsg), Color3.fromRGB(255, 0, 0), 3)
-        print("❌ 皮腳本錯誤: " .. errMsg)
-        return false
+        warn("❌ 高級快速攻擊系統初始化失敗: " .. tostring(result))
+        return nil
+    end
+end
+
+local function startAdvancedFastAttack()
+    if not AdvancedFastAttackSystem.enabled then
+        local fastAttackModule = initializeAdvancedFastAttack()
+        if fastAttackModule then
+            AdvancedFastAttackSystem.enabled = true
+            AdvancedFastAttackSystem.connection = runService.Heartbeat:Connect(function()
+                if AdvancedFastAttackSystem.enabled then
+                    pcall(function()
+                        if fastAttackModule and fastAttackModule.BladeHits then
+                            fastAttackModule:BladeHits()
+                        end
+                    end)
+                end
+            end)
+            showNotification("⚡ 高級快速攻擊已啟動", Color3.fromRGB(0, 180, 0), 1.5)
+        end
+    end
+end
+
+local function stopAdvancedFastAttack()
+    if AdvancedFastAttackSystem.enabled then
+        AdvancedFastAttackSystem.enabled = false
+        if AdvancedFastAttackSystem.connection then
+            AdvancedFastAttackSystem.connection:Disconnect()
+            AdvancedFastAttackSystem.connection = nil
+        end
+        showNotification("🛑 快速攻擊已停止", Color3.fromRGB(200, 0, 0), 1.5)
     end
 end
 
 -- ========================
--- XA按鈕功能
+-- 各功能系統
 -- ========================
-print("🌟 設置XA功能...")
+print("⚡ 初始化各功能系統...")
 
+-- 全局狀態變量
+local piScriptLoaded = false
+local piScript = nil
 local xaLoaded = false
 local xaRunning = false
-
-local function executeXAScript()
-    showNotification("🌟 正在加載XA腳本...", Color3.fromRGB(255, 165, 0), 2)
-    
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.gitcode.com/Xingtaiduan/Scripts/raw/main/Loader.lua"))()
-        return true
-    end)
-    
-    if success then
-        showNotification("✅ XA腳本加載成功！", Color3.fromRGB(0, 180, 0), 2)
-        print("✅ XA腳本加載成功")
-        return true
-    else
-        local errMsg = err or "未知錯誤"
-        showNotification("❌ XA腳本加載失敗\n錯誤: " .. tostring(errMsg), Color3.fromRGB(255, 0, 0), 3)
-        print("❌ XA腳本錯誤: " .. tostring(errMsg))
-        return false
-    end
-end
-
--- ========================
--- 飛行功能
--- ========================
-print("✈️ 設置飛行功能...")
-
+local xaScript = nil
 local isFlying = false
 local flightLoaded = false
-
-local function executeFlightScript()
-    showNotification("✈️ 正在加載飛行模組...", Color3.fromRGB(255, 165, 0), 2)
-    
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fly.lua"))()
-        return true
-    end)
-    
-    if success then
-        showNotification("✅ 飛行模組加載成功！", Color3.fromRGB(0, 180, 0), 2)
-        print("✅ 飛行腳本加載成功")
-        return true
-    else
-        local errMsg = err or "未知錯誤"
-        showNotification("❌ 飛行模組加載失敗\n錯誤: " .. tostring(errMsg), Color3.fromRGB(255, 0, 0), 3)
-        print("❌ 飛行腳本錯誤: " .. tostring(errMsg))
-        return false
-    end
-end
-
--- ========================
--- FPS 優化功能
--- ========================
-print("🖥️ 設置 FPS 優化功能...")
-
+local flightScript = nil
 local isFPSBoosted = false
 local fpsBoostLoaded = false
-
-local function executeFPSBoostScript()
-    showNotification("🖥️ 正在優化 FPS...", Color3.fromRGB(255, 165, 0), 2)
-    
-    local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/kexuan001/rjrym/refs/heads/main/fpsboost"))()
-        return true
-    end)
-    
-    if success then
-        showNotification("✅ FPS 優化已應用！", Color3.fromRGB(0, 180, 0), 2)
-        print("✅ FPS 優化腳本加載成功")
-        return true
-    else
-        local errMsg = err or "未知錯誤"
-        showNotification("❌ FPS 優化失敗\n錯誤: " .. tostring(errMsg), Color3.fromRGB(255, 0, 0), 3)
-        print("❌ FPS 優化錯誤: " .. tostring(errMsg))
-        return false
-    end
-end
+local fpsScript = nil
 
 -- ========================
 -- UI顯示/隱藏功能
@@ -762,7 +741,7 @@ local function toggleUI()
         buttonHint.Text = "關閉玄丛腳本"
         
         -- 動畫效果
-        mainFrame.Position = UDim2.new(0.5, -175, 0.5, -160)
+        mainFrame.Position = UDim2.new(0.5, -145, 0.5, -120)
         mainFrame.BackgroundTransparency = 1
         
         local fadeIn = tweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
@@ -770,7 +749,7 @@ local function toggleUI()
         })
         fadeIn:Play()
         
-        showNotification("📱 玄丛腳本超大版已開啟", Color3.fromRGB(50, 150, 200), 1.5)
+        showNotification("✅ 玄丛腳本 v7.4 已開啟\n⚡ 高級快速攻擊整合版", Color3.fromRGB(50, 150, 200), 1.5)
     else
         -- 隱藏UI
         sidebarButton.Text = "⚙️"
@@ -790,7 +769,7 @@ local function toggleUI()
 end
 
 -- ========================
--- 按鈕事件（超大版）
+-- 按鈕事件處理
 -- ========================
 print("🔧 設置按鈕事件...")
 
@@ -799,179 +778,208 @@ sidebarButton.MouseButton1Click:Connect(function()
     toggleUI()
 end)
 
--- 快速攻擊按鈕
-fastAttackBtn.MouseButton1Click:Connect(function()
-    print("🔘 快速攻擊按鈕被點擊")
-    
-    if not fastAttackModule then
-        showNotification("🔄 正在初始化快速攻擊系統...", Color3.fromRGB(255, 165, 0), 1)
-        fastAttackModule = initFastAttack()
-        if not fastAttackModule then
-            showNotification("❌ 快速攻擊初始化失敗", Color3.fromRGB(255, 0, 0), 1.5)
-            return
-        end
-    end
-    
-    isFastAttackOn = not isFastAttackOn
-    
-    if isFastAttackOn then
-        -- 開啟快速攻擊
-        fastAttackBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
-        fastAttackBtn.Text = "⚡ 快速攻擊 [ON]"
-        showNotification("⚡ 快速攻擊已開啟\n正在自動攻擊敵人...", Color3.fromRGB(0, 180, 0), 2)
+-- 皮腳本按鈕（使用外部腳本）
+piScriptBtn.MouseButton1Click:Connect(function()
+    if not piScriptLoaded then
+        piScriptBtn.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+        piScriptBtn.Text = "🅿️ 加載中..."
+        showNotification("🌐 正在從GitHub加載皮腳本...", Color3.fromRGB(255, 165, 0), 2)
         
-        -- 啟動快速攻擊循環
-        if fastAttackModule and fastAttackModule.start then
-            fastAttackModule:start()
-        end
+        -- 加載外部皮腳本
+        task.spawn(function()
+            piScript = safeLoadExternalScript(EXTERNAL_SCRIPTS.PI_SCRIPT, "皮腳本")
+            
+            if piScript then
+                piScriptLoaded = true
+                piScriptBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+                piScriptBtn.Text = "🅿️ 皮腳本 [ON]"
+                showNotification("✅ 皮腳本加載成功", Color3.fromRGB(0, 180, 0), 2)
+            else
+                piScriptBtn.BackgroundColor3 = Color3.fromRGB(220, 80, 80)
+                piScriptBtn.Text = "🅿️ 加載失敗"
+                showNotification("❌ 皮腳本加載失敗", Color3.fromRGB(220, 0, 0), 2)
+                task.wait(2)
+                piScriptBtn.BackgroundColor3 = Color3.fromRGB(220, 150, 50)
+                piScriptBtn.Text = "🅿️ 皮腳本"
+            end
+        end)
     else
-        -- 關閉快速攻擊
-        fastAttackBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 220)
-        fastAttackBtn.Text = "⚡ 快速攻擊 [OFF]"
-        showNotification("🛑 快速攻擊已關閉", Color3.fromRGB(200, 0, 0), 1.5)
-        
-        -- 停止快速攻擊循環
-        if fastAttackModule and fastAttackModule.stop then
-            fastAttackModule:stop()
+        -- 皮腳本已加載，顯示狀態
+        if piScript then
+            piScriptBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+            piScriptBtn.Text = "🅿️ 皮腳本 [ON]"
+            showNotification("✅ 皮腳本已加載完成", Color3.fromRGB(0, 180, 0), 1.5)
+        else
+            piScriptBtn.BackgroundColor3 = Color3.fromRGB(220, 150, 50)
+            piScriptBtn.Text = "🅿️ 皮腳本"
+            showNotification("🅿️ 點擊重新加載皮腳本", Color3.fromRGB(220, 150, 50), 1.5)
         end
     end
 end)
 
--- XA按鈕
+-- XA按鈕（使用外部腳本）
 xaBtn.MouseButton1Click:Connect(function()
     if not xaLoaded then
-        -- 第一次點擊，加載XA腳本
         xaBtn.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
         xaBtn.Text = "🌟 加載中..."
+        showNotification("🌐 正在從GitCode加載XA腳本...", Color3.fromRGB(255, 165, 0), 2)
         
-        local success = executeXAScript()
-        
-        if success then
-            xaLoaded = true
-            xaRunning = true
-            xaBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
-            xaBtn.Text = "🌟 XA [ON]"
-        else
-            xaBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
-            xaBtn.Text = "🌟 加載失敗"
+        -- 加載外部XA腳本
+        task.spawn(function()
+            xaScript = safeLoadExternalScript(EXTERNAL_SCRIPTS.XA, "XA腳本")
             
-            -- 重置狀態
-            task.wait(1.5)
-            xaBtn.BackgroundColor3 = Color3.fromRGB(220, 120, 50)
-            xaBtn.Text = "🌟 XA"
-        end
+            if xaScript then
+                xaLoaded = true
+                xaRunning = true
+                xaBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+                xaBtn.Text = "🌟 XA [ON]"
+                showNotification("✅ XA腳本加載成功", Color3.fromRGB(0, 180, 0), 2)
+            else
+                xaBtn.BackgroundColor3 = Color3.fromRGB(220, 80, 80)
+                xaBtn.Text = "🌟 加載失敗"
+                showNotification("❌ XA腳本加載失敗", Color3.fromRGB(220, 0, 0), 2)
+                task.wait(2)
+                xaBtn.BackgroundColor3 = Color3.fromRGB(220, 120, 50)
+                xaBtn.Text = "🌟 XA"
+            end
+        end)
     else
-        -- 已經加載過，切換狀態顯示
         xaRunning = not xaRunning
         
         if xaRunning then
             xaBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
             xaBtn.Text = "🌟 XA [ON]"
-            showNotification("✅ XA功能已啟用", Color3.fromRGB(0, 180, 0), 1.5)
+            showNotification("✅ XA功能已啟用", Color3.fromRGB(0, 180, 0), 1.2)
+            
+            -- 如果是外部腳本，可能需要重新執行某些功能
+            if xaScript then
+                pcall(function()
+                    -- 嘗試執行XA腳本的啟動函數
+                    if type(xaScript) == "function" then
+                        xaScript()
+                    end
+                end)
+            end
         else
             xaBtn.BackgroundColor3 = Color3.fromRGB(220, 120, 50)
             xaBtn.Text = "🌟 XA [OFF]"
-            showNotification("🌟 XA功能已關閉", Color3.fromRGB(150, 150, 150), 1.5)
+            showNotification("🌟 XA功能已關閉", Color3.fromRGB(150, 150, 150), 1.2)
         end
     end
 end)
 
--- 皮腳本按鈕
-piScriptBtn.MouseButton1Click:Connect(function()
-    piScriptBtn.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
-    piScriptBtn.Text = "🅿️ 加載中..."
-    
-    local success = executePiScript()
-    
-    if success then
-        piScriptBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
-        piScriptBtn.Text = "🅿️ 加載成功"
-        task.wait(1.5)
-        piScriptBtn.BackgroundColor3 = Color3.fromRGB(220, 150, 50)
-        piScriptBtn.Text = "🅿️ 皮腳本"
+-- 快速攻擊按鈕（使用高級快速攻擊系統）
+fastAttackBtn.MouseButton1Click:Connect(function()
+    if AdvancedFastAttackSystem.enabled then
+        -- 停止快速攻擊
+        stopAdvancedFastAttack()
+        fastAttackBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 220)
+        fastAttackBtn.Text = "⚡ 快速攻擊 [OFF]"
     else
-        piScriptBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
-        piScriptBtn.Text = "🅿️ 加載失敗"
-        task.wait(1.5)
-        piScriptBtn.BackgroundColor3 = Color3.fromRGB(220, 150, 50)
-        piScriptBtn.Text = "🅿️ 皮腳本"
+        -- 啟動快速攻擊
+        startAdvancedFastAttack()
+        fastAttackBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+        fastAttackBtn.Text = "⚡ 快速攻擊 [ON]"
     end
 end)
 
--- 飛行按鈕
+-- 飛行按鈕（使用外部腳本）
 flightBtn.MouseButton1Click:Connect(function()
     if not flightLoaded then
-        -- 第一次點擊，加載飛行腳本
         flightBtn.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
         flightBtn.Text = "✈️ 加載中..."
+        showNotification("🌐 正在從GitHub加載飛行腳本...", Color3.fromRGB(255, 165, 0), 2)
         
-        local success = executeFlightScript()
-        
-        if success then
-            flightLoaded = true
-            isFlying = true
-            flightBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
-            flightBtn.Text = "✈️ 飛行 [ON]"
-        else
-            flightBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
-            flightBtn.Text = "✈️ 加載失敗"
+        -- 加載外部飛行腳本
+        task.spawn(function()
+            flightScript = safeLoadExternalScript(EXTERNAL_SCRIPTS.FLIGHT, "飛行腳本")
             
-            -- 重置狀態
-            task.wait(1.5)
-            flightBtn.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
-            flightBtn.Text = "✈️ 飛行"
-        end
+            if flightScript then
+                flightLoaded = true
+                isFlying = true
+                flightBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+                flightBtn.Text = "✈️ 飛行 [ON]"
+                showNotification("✅ 飛行腳本加載成功", Color3.fromRGB(0, 180, 0), 2)
+            else
+                flightBtn.BackgroundColor3 = Color3.fromRGB(220, 80, 80)
+                flightBtn.Text = "✈️ 加載失敗"
+                showNotification("❌ 飛行腳本加載失敗", Color3.fromRGB(220, 0, 0), 2)
+                task.wait(2)
+                flightBtn.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
+                flightBtn.Text = "✈️ 飛行"
+            end
+        end)
     else
-        -- 已經加載過，切換狀態顯示
         isFlying = not isFlying
         
         if isFlying then
             flightBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
             flightBtn.Text = "✈️ 飛行 [ON]"
-            showNotification("✅ 飛行模式已開啟", Color3.fromRGB(0, 180, 0), 1.5)
+            showNotification("✅ 飛行模式已開啟", Color3.fromRGB(0, 180, 0), 1.2)
+            
+            -- 如果是外部腳本，可能需要重新執行某些功能
+            if flightScript then
+                pcall(function()
+                    -- 嘗試執行飛行腳本的啟動函數
+                    if type(flightScript) == "function" then
+                        flightScript()
+                    end
+                end)
+            end
         else
             flightBtn.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
             flightBtn.Text = "✈️ 飛行 [OFF]"
-            showNotification("🛑 飛行模式已關閉", Color3.fromRGB(200, 0, 0), 1.5)
+            showNotification("🛑 飛行模式已關閉", Color3.fromRGB(200, 0, 0), 1.2)
         end
     end
 end)
 
--- FPS 優化按鈕
+-- FPS優化按鈕（使用外部腳本）
 fpsBoostBtn.MouseButton1Click:Connect(function()
     if not fpsBoostLoaded then
-        -- 第一次點擊，加載 FPS 優化
         fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
         fpsBoostBtn.Text = "🖥️ 優化中..."
+        showNotification("🌐 正在從GitHub加載FPS優化腳本...", Color3.fromRGB(255, 165, 0), 2)
         
-        local success = executeFPSBoostScript()
-        
-        if success then
-            fpsBoostLoaded = true
-            isFPSBoosted = true
-            fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
-            fpsBoostBtn.Text = "🖥️ FPS優化 [ON]"
-        else
-            fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
-            fpsBoostBtn.Text = "🖥️ 優化失敗"
+        -- 加載外部FPS優化腳本
+        task.spawn(function()
+            fpsScript = safeLoadExternalScript(EXTERNAL_SCRIPTS.FPS_BOOST, "FPS優化腳本")
             
-            -- 重置狀態
-            task.wait(1.5)
-            fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(180, 100, 220)
-            fpsBoostBtn.Text = "🖥️ FPS優化"
-        end
+            if fpsScript then
+                fpsBoostLoaded = true
+                isFPSBoosted = true
+                fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
+                fpsBoostBtn.Text = "🖥️ FPS優化 [ON]"
+                showNotification("✅ FPS優化腳本加載成功", Color3.fromRGB(0, 180, 0), 2)
+            else
+                fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(220, 80, 80)
+                fpsBoostBtn.Text = "🖥️ 加載失敗"
+                showNotification("❌ FPS優化腳本加載失敗", Color3.fromRGB(220, 0, 0), 2)
+                task.wait(2)
+                fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(180, 100, 220)
+                fpsBoostBtn.Text = "🖥️ FPS優化"
+            end
+        end)
     else
-        -- 已經加載過，切換狀態顯示
         isFPSBoosted = not isFPSBoosted
         
         if isFPSBoosted then
             fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(60, 220, 60)
             fpsBoostBtn.Text = "🖥️ FPS優化 [ON]"
-            showNotification("✅ FPS 優化已啟用", Color3.fromRGB(0, 180, 0), 1.5)
+            showNotification("✅ FPS優化已啟用", Color3.fromRGB(0, 180, 0), 1.2)
+            
+            -- 如果是外部腳本，可能需要重新執行某些功能
+            if fpsScript then
+                pcall(function()
+                    if type(fpsScript) == "function" then
+                        fpsScript()
+                    end
+                end)
+            end
         else
             fpsBoostBtn.BackgroundColor3 = Color3.fromRGB(180, 100, 220)
             fpsBoostBtn.Text = "🖥️ FPS優化 [OFF]"
-            showNotification("🖥️ FPS 優化已關閉", Color3.fromRGB(150, 150, 150), 1.5)
+            showNotification("🖥️ FPS優化已關閉", Color3.fromRGB(150, 150, 150), 1.2)
         end
     end
 end)
@@ -993,37 +1001,67 @@ if not isMobile then
 end
 
 -- ========================
+-- 網絡安全檢查
+-- ========================
+local function checkNetworkSafety()
+    print("🔒 進行網絡安全檢查...")
+    
+    -- 檢查URL是否有效
+    local function isValidURL(url)
+        return url and type(url) == "string" and 
+               (url:find("^https://") or url:find("^http://"))
+    end
+    
+    for name, url in pairs(EXTERNAL_SCRIPTS) do
+        if isValidURL(url) then
+            print("✅ " .. name .. " URL格式有效: " .. url)
+        else
+            warn("⚠️ " .. name .. " URL格式可能無效: " .. tostring(url))
+        end
+    end
+    
+    print("🔒 網絡安全檢查完成")
+end
+
+checkNetworkSafety()
+
+-- ========================
+-- 自動清理功能
+-- ========================
+game:GetService("Players").PlayerRemoving:Connect(function(leavingPlayer)
+    if leavingPlayer == player then
+        -- 清理所有連接
+        stopAdvancedFastAttack()
+        
+        -- 清理全局變量
+        _G.FastAttack = false
+        
+        print("🧹 清理玩家資源...")
+    end
+end)
+
+-- ========================
 -- 初始化完成
 -- ========================
 task.wait(0.5)
 
 -- 顯示啟動通知
-showNotification("✅ 玄丛腳本超大版已加載 v6.4\n⚡ 快速攻擊 + 🌟 XA腳本\n🅿️ 皮腳本 + ✈️ 飛行\n🖥️ FPS優化", Color3.fromRGB(50, 150, 200), 3)
+showNotification("✅ 玄丛腳本 v7.4 已加載\n⚡ 高級快速攻擊整合完成", Color3.fromRGB(50, 150, 200), 2.5)
 
 print("🎮 =================================")
-print("🎮 玄丛腳本 - 超大版 v6.4")
+print("🎮 玄丛腳本 - 完整功能整合版 v7.4")
 print("🎮 設備: " .. deviceType)
-print("🎮 UI尺寸: 350×320 (超大版)")
-print("🎮 按鈕尺寸: 50像素高度")
-print("🎮 按鈕佈局: 雙排設計")
-print("🎮 功能包括:")
-print("🎮   ⚡ 新版快速攻擊系統")
-print("🎮   🌟 XA腳本 (GitCode)")
-print("🎮   🅿️ 皮腳本加載")
-print("🎮   ✈️ 飛行功能")
-print("🎮   🖥️ FPS優化功能")
-print("🎮   🎨 超大可拖動UI界面")
+print("🎮 功能特色:")
+print("🎮   1. ⚡ 高級快速攻擊系統 (您的代碼)")
+print("🎮   2. 🅿️ 皮腳本 (外部)")
+print("🎮   3. 🌟 XA腳本 (外部)")
+print("🎮   4. ✈️ 飛行腳本 (外部)")
+print("🎮   5. 🖥️ FPS優化腳本 (外部)")
+print("🎮 系統特性:")
+print("🎮   - 安全加載機制")
+print("🎮   - 錯誤保護系統")
+print("🎮   - 自動資源清理")
+print("🎮   - 完整UI界面")
 print("🎮 =================================")
 
--- 預加載快速攻擊系統
-task.spawn(function()
-    task.wait(1)
-    print("🔧 預加載快速攻擊系統...")
-    fastAttackModule = initFastAttack()
-    if fastAttackModule then
-        print("✅ 快速攻擊系統預加載完成")
-        showNotification("⚡ 快速攻擊系統就緒\n點擊按鈕開啟功能", Color3.fromRGB(100, 150, 200), 2)
-    end
-end)
-
-print("🚀 腳本加載完成！玄丛腳本 v6.4 超大版已就緒。")
+print("🚀 腳本加載完成！玄丛腳本 v7.4 完整版已就緒。")
